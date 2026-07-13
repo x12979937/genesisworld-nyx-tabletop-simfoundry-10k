@@ -4,7 +4,7 @@ GenesisWorld + Nyx tabletop dataset for SimFoundry input testing.
 
 This repository stores scripts, manifests, and GitHub Release links. The actual data is stored as compressed release shards because the dataset contains videos and state sidecars.
 
-Current generation target: 2 valid groups.
+Current generation target: 10000 valid groups.
 
 Each accepted group includes:
 
