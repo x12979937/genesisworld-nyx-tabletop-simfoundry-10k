@@ -723,9 +723,13 @@ def main():
                     if gh and accepted and rec.get('archive'):
                         with upload_lock:
                             archive = Path(rec['archive'])
-                            url, action = gh.upload_asset(archive, tag=args.release_tag)
-                            upload_result = {'archive': archive.name, 'url': url, 'action': action, 'uploaded_at_utc': utc_now()}
-                            append_jsonl(FS_ROOT / 'github' / 'uploads.jsonl', upload_result, manifest_lock)
+                            try:
+                                url, action = gh.upload_asset(archive, tag=args.release_tag)
+                                upload_result = {'archive': archive.name, 'url': url, 'action': action, 'uploaded_at_utc': utc_now()}
+                                append_jsonl(FS_ROOT / 'github' / 'uploads.jsonl', upload_result, manifest_lock)
+                            except Exception as upload_exc:
+                                upload_result = {'archive': archive.name, 'action': 'upload_failed', 'error': repr(upload_exc), 'uploaded_at_utc': utc_now()}
+                                append_jsonl(FS_ROOT / 'github' / 'upload_errors.jsonl', upload_result, manifest_lock)
                     append_jsonl(FS_ROOT / 'manifests' / 'batch_results.jsonl', {**rec, 'github_upload': upload_result}, manifest_lock)
                     write_status({'state': 'running', 'last_completed_batch': rec.get('batch_seq'), 'completed_batches': completed_batches, 'failed_batches': failed_batches, 'in_flight': list(in_flight.values())})
                     if consecutive_failed_batches >= args.max_consecutive_failed_batches:
@@ -753,6 +757,8 @@ def main():
         gh.put_file('manifests/status.json', status_path.read_text(encoding='utf-8'), 'Update dataset status')
         if (FS_ROOT / 'github' / 'uploads.jsonl').is_file():
             gh.put_file('manifests/uploads.jsonl', (FS_ROOT / 'github' / 'uploads.jsonl').read_text(encoding='utf-8'), 'Update upload manifest')
+        if (FS_ROOT / 'github' / 'upload_errors.jsonl').is_file():
+            gh.put_file('manifests/upload_errors.jsonl', (FS_ROOT / 'github' / 'upload_errors.jsonl').read_text(encoding='utf-8'), 'Update upload error manifest')
         gh.put_file('manifests/global_manifest.head.jsonl', ''.join((FS_ROOT / 'manifests' / 'global_manifest.jsonl').read_text(encoding='utf-8').splitlines(True)[-200:]), 'Update manifest tail')
     write_status(final_status)
     print(json.dumps(final_status, indent=2, ensure_ascii=False))
