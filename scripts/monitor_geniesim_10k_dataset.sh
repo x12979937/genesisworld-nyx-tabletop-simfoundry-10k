@@ -10,7 +10,9 @@ PY="/root/autodl-tmp/mingyu/venvs/genesisworld_py310/bin/python"
 [[ -x "$PY" ]] || PY="python3"
 
 while true; do
-  clear || true
+  if [[ -n "${TERM:-}" ]]; then
+    clear || true
+  fi
   date '+%F %T %Z'
   echo
   echo "== processes =="
@@ -46,7 +48,7 @@ PY
     "$PY" - <<'PY' "$UP_STATUS"
 import json, sys
 d=json.load(open(sys.argv[1], encoding='utf-8'))
-for k in ['state','archives_total','uploaded_recorded','pending_count','uploaded_this_pass','current_archive','current_size_bytes','updated_at_utc']:
+for k in ['state','repo_url','release_tag','archives_total','uploaded_recorded','pending_count','uploaded_this_pass','current_archive','current_size_bytes','updated_at_utc']:
     if k in d:
         print(f'{k}: {d[k]}')
 if d.get('pending'):
