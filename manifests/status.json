@@ -3,25 +3,25 @@
   "dataset_name": "genesisworld-nyx-tabletop-simfoundry-10k",
   "disk": {
     "fs": {
-      "free_bytes": 1807354355712,
-      "inode_free": 30746,
+      "free_bytes": 1804119093248,
+      "inode_free": 30697,
       "inode_total": 700000,
-      "inode_used": 669254,
+      "inode_used": 669303,
       "path": "/autodl-fs/data",
       "total_bytes": 21990232555520,
-      "used_bytes": 20182878199808
+      "used_bytes": 20186113462272
     },
     "tmp": {
-      "free_bytes": 304266514432,
-      "inode_free": 1482426334,
+      "free_bytes": 303869325312,
+      "inode_free": 1482425841,
       "inode_total": 1500266688,
-      "inode_used": 17840354,
+      "inode_used": 17840847,
       "path": "/root/autodl-tmp",
       "total_bytes": 1127428915200,
-      "used_bytes": 823162400768
+      "used_bytes": 823559589888
     }
   },
-  "elapsed_s": 135.22263097763062,
+  "elapsed_s": 300.67631936073303,
   "fs_root": "/autodl-fs/data/mingyu/video2sim_roboticArm/datasets/genesisworld-nyx-tabletop-simfoundry-10k",
   "github_upload_enabled": false,
   "in_flight": [
@@ -37,5 +37,5 @@
   "state": "running",
   "target_total": 10000,
   "tmp_root": "/root/autodl-tmp/mingyu/genesisworld/datasets/genesisworld-nyx-tabletop-simfoundry-10k",
-  "updated_at_utc": "2026-07-13T04:15:33+00:00"
+  "updated_at_utc": "2026-07-13T04:18:19+00:00"
 }
