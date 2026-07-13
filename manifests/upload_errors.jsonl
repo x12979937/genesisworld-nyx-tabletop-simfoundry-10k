@@ -1,0 +1,2 @@
+{"action": "upload_failed", "archive": "shard_000007_groups_00000128_00000152.tar.gz", "error": "URLError(BrokenPipeError(32, 'Broken pipe'))", "uploaded_at_utc": "2026-07-13T05:31:21+00:00"}
+{"action": "upload_failed", "archive": "shard_000007_groups_00000128_00000152.tar.gz", "error": "TimeoutError('The read operation timed out')", "uploaded_at_utc": "2026-07-13T05:38:57+00:00"}
