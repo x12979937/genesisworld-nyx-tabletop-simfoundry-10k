@@ -1,9 +1,9 @@
 {
-  "current_archive": "shard_000009_groups_00000178_00000202.tar.gz",
-  "current_size_bytes": 468191928,
+  "current_archive": "shard_000010_groups_00000203_00000227.tar.gz",
+  "current_size_bytes": 489171584,
   "pending_count": 1,
   "release_tag": "dataset-shards-v1",
   "repo_url": "https://github.com/x12979937/genesisworld-nyx-tabletop-simfoundry-10k",
   "state": "uploading",
-  "updated_at_utc": "2026-07-13T06:11:19+00:00"
+  "updated_at_utc": "2026-07-13T06:30:27+00:00"
 }
