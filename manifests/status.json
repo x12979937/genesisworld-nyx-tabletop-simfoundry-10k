@@ -1,41 +1,41 @@
 {
-  "accepted_count": 277,
+  "accepted_count": 302,
   "dataset_name": "genesisworld-nyx-tabletop-simfoundry-10k",
   "disk": {
     "fs": {
-      "free_bytes": 1650102374400,
-      "inode_free": 26548,
+      "free_bytes": 1643357896704,
+      "inode_free": 26263,
       "inode_total": 700000,
-      "inode_used": 673452,
+      "inode_used": 673737,
       "path": "/autodl-fs/data",
       "total_bytes": 21990232555520,
-      "used_bytes": 20340130181120
+      "used_bytes": 20346874658816
     },
     "tmp": {
-      "free_bytes": 302961758208,
-      "inode_free": 1482419122,
+      "free_bytes": 302912806912,
+      "inode_free": 1482417739,
       "inode_total": 1500266688,
-      "inode_used": 17847566,
+      "inode_used": 17848949,
       "path": "/root/autodl-tmp",
       "total_bytes": 1127428915200,
-      "used_bytes": 824467156992
+      "used_bytes": 824516108288
     }
   },
-  "elapsed_s": 10451.21062040329,
+  "elapsed_s": 11962.82134437561,
   "fs_root": "/autodl-fs/data/mingyu/video2sim_roboticArm/datasets/genesisworld-nyx-tabletop-simfoundry-10k",
   "github_upload_enabled": false,
   "in_flight": [
     {
       "gpu": "0",
       "requested": 25,
-      "seq": 13
+      "seq": 14
     }
   ],
-  "next_batch_seq": 14,
-  "next_group_id": 278,
+  "next_batch_seq": 15,
+  "next_group_id": 303,
   "repo_url": null,
   "state": "running",
   "target_total": 10000,
   "tmp_root": "/root/autodl-tmp/mingyu/genesisworld/datasets/genesisworld-nyx-tabletop-simfoundry-10k",
-  "updated_at_utc": "2026-07-13T07:07:29+00:00"
+  "updated_at_utc": "2026-07-13T07:32:41+00:00"
 }
