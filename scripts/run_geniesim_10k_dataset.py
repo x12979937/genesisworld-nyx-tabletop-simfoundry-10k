@@ -576,8 +576,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--total', type=int, default=10000)
     ap.add_argument('--batch-size', type=int, default=25)
-    ap.add_argument('--workers', type=int, default=2)
-    ap.add_argument('--gpu-list', default='2,3')
+    ap.add_argument('--workers', type=int, default=1)
+    ap.add_argument('--gpu-list', default='0')
     ap.add_argument('--frames', type=int, default=30)
     ap.add_argument('--width', type=int, default=480)
     ap.add_argument('--height', type=int, default=270)
@@ -605,6 +605,7 @@ def main():
     ap.add_argument('--github-private', action='store_true')
     ap.add_argument('--enable-github-upload', action='store_true')
     ap.add_argument('--release-tag', default='dataset-shards-v1')
+    ap.add_argument('--max-consecutive-failed-batches', type=int, default=5)
     args = ap.parse_args()
 
     ensure_dirs(args)
@@ -679,6 +680,7 @@ def main():
     in_flight_requested = 0
     completed_batches = 0
     failed_batches = 0
+    consecutive_failed_batches = 0
     start = time.time()
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
@@ -707,6 +709,10 @@ def main():
                     completed_batches += 1
                     accepted = int(rec.get('accepted_count') or 0)
                     accepted_count += accepted
+                    if accepted > 0:
+                        consecutive_failed_batches = 0
+                    else:
+                        consecutive_failed_batches += 1
                     upload_result = None
                     if gh and accepted and rec.get('archive'):
                         with upload_lock:
@@ -716,11 +722,18 @@ def main():
                             append_jsonl(FS_ROOT / 'github' / 'uploads.jsonl', upload_result, manifest_lock)
                     append_jsonl(FS_ROOT / 'manifests' / 'batch_results.jsonl', {**rec, 'github_upload': upload_result}, manifest_lock)
                     write_status({'state': 'running', 'last_completed_batch': rec.get('batch_seq'), 'completed_batches': completed_batches, 'failed_batches': failed_batches, 'in_flight': list(in_flight.values())})
+                    if consecutive_failed_batches >= args.max_consecutive_failed_batches:
+                        write_status({'state': 'aborted', 'abort_reason': f'{consecutive_failed_batches} consecutive zero-accepted batches'})
+                        raise RuntimeError(f'aborting after {consecutive_failed_batches} consecutive zero-accepted batches')
                 except Exception as exc:
                     failed_batches += 1
+                    consecutive_failed_batches += 1
                     err = {'batch': info, 'error': repr(exc), 'time_utc': utc_now()}
                     append_jsonl(FS_ROOT / 'logs' / 'batch_errors.jsonl', err, manifest_lock)
                     write_status({'state': 'running_with_errors', 'last_error': err, 'completed_batches': completed_batches, 'failed_batches': failed_batches, 'in_flight': list(in_flight.values())})
+                    if consecutive_failed_batches >= args.max_consecutive_failed_batches:
+                        write_status({'state': 'aborted', 'abort_reason': f'{consecutive_failed_batches} consecutive failed batches', 'last_error': err})
+                        raise RuntimeError(f'aborting after {consecutive_failed_batches} consecutive failed batches') from exc
                     time.sleep(5)
 
     final_status = {
