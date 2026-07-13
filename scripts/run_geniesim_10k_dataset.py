@@ -124,14 +124,20 @@ def check_disk_or_raise(args):
 
 
 def parse_final_json_payload(text):
-    lines = text.splitlines()
-    for i in range(len(lines) - 1, -1, -1):
-        if lines[i].strip() == '{':
-            candidate = '\n'.join(lines[i:])
-            try:
-                return json.loads(candidate)
-            except Exception:
-                continue
+    decoder = json.JSONDecoder()
+    found = None
+    idx = text.find('{')
+    while idx != -1:
+        try:
+            payload, _ = decoder.raw_decode(text[idx:])
+        except Exception:
+            idx = text.find('{', idx + 1)
+            continue
+        if isinstance(payload, dict) and 'clips' in payload:
+            found = payload
+        idx = text.find('{', idx + 1)
+    if found is not None:
+        return found
     raise ValueError('could not find final JSON payload in generator log')
 
 
